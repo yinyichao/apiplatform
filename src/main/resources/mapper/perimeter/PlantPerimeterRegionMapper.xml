@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ip.founder.apiplatform.dao.perimeter.PlantPerimeterRegionMapper">
+	<select id="findAllVideoRegion" resultType="com.ip.founder.apiplatform.pojo.PlantPerimeterRegion">
+		select * from plant_perimeter_region
+	</select>
+	<update id="updateVideoRegion" parameterType="String">
+		update plant_perimeter_region set id = #{1} where id =#{0}
+	</update >
+	<update id="updateVideoRegionP" parameterType="String">
+		update plant_perimeter_region set parent_id = #{1} where id =#{0}
+	</update >
+	<delete id="delete">
+		delete plant_perimeter_region
+	</delete>
+</mapper>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ip.founder.apiplatform.dao.perimeter.YjFaceMapper">
+	<insert id="insertData" parameterType="com.ip.founder.apiplatform.pojo.YjFace">
+       <selectKey keyProperty="id" resultType="String" order="BEFORE">
+           select nvl(max(TO_NUMBER(id)),0)+1 from yj_face
+       </selectKey>
+		insert into yj_face (id,photo_url1,identify_time,ic_card,similarity,name,photo_url2,type,is_alarm,prison_id)
+		values(#{id},#{photo_url1},#{identify_time},#{ic_card},#{similarity},#{name},#{photo_url2},#{type},#{is_alarm},#{prison_id})
+	</insert>
+	<select id="findFaceByTime" parameterType="String" resultType="int">
+		select count(1) from yj_face where identify_time = #{0}
+	</select>
+</mapper>

@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title></title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link rel="stylesheet" href="/css/cameraview.css" />
+	<link rel="stylesheet" href="/css/main.css" />
+</head>
+
+<body>  
+	<div class="frame-div1">
+		<div class="table-div" align="center">
+			<table width="98%" align="center" cellpadding="0" cellspacing="0">				
+					<tr>								 							
+						<!--[判断，调用海康，大华摄像头  --> 
+						<td> 	
+							<span onclick="showStartPreviewHK('01','23453467001310000001')" style="cursor:pointer ; color:#0066FF;">查看海康视频</span>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							<span  onclick="showPlayBackHK('04','23453467001310000001')" style="cursor:pointer ; color:#0066FF;">查看海康录像</span>												 
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							<span  onclick="showStartPreviewDH('07','1000951$1$0$0')" style="cursor:pointer ; color:#0066FF;">查看大华视频</span>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							<span  onclick="showPlayBackDH('00','1000328@001$1$0$0')" style="cursor:pointer ; color:#0066FF;">查看大华录像</span>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							<span  onclick="showDemo('04','1000001$1$0$0')" style="cursor:pointer ; color:#0066FF;">查看大华demo</span>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							<span  onclick="rhtx()" style="cursor:pointer ; color:#0066FF;">融合通信</span>
+							<span  onclick="preview64()" style="cursor:pointer ; color:#0066FF;">64</span>
+							<span  onclick="previewDH()" style="cursor:pointer ; color:#0066FF;">大华</span>
+						</td>
+						<!--判断，调用海康，大华摄像头] --> 
+						
+					</tr>
+			</table>
+		</div>
+	</div>
+
+</body>
+<script src="/js/jquery-1.12.4.min.js"></script>
+<script src="/js/cameraview/cameraview.js"></script>
+</html>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ip.founder.apiplatform.dao.tel.PlantTelMapper">
+	<update id="updateData" parameterType="com.ip.founder.apiplatform.pojo.PlantRunningStatus">
+		update plant_tel set status = #{status}
+		where code = #{fid}
+	</update>
+	<insert id="insertData" parameterType="com.ip.founder.apiplatform.pojo.PlantTel">
+		<selectKey keyProperty="id" resultType="String" order="BEFORE">
+           select nvl(max(TO_NUMBER(id)),0)+1 from plant_tel
+       </selectKey>
+       insert into plant_tel
+       (id,number,name,sn,position,type,level,ip,mac,org_fid,super_fid,pid,fid,region_id,status,model,code,in_time)
+       values(#{id},#{number},#{name},#{sn},#{position},#{type},#{level},#{ip},#{mac},#{orgFid},#{superFid},#{pid},#{fid},#{regionId},#{status},#{model},#{code},#{in_time})
+	</insert>
+	
+	<delete id="deleteData" parameterType="String">
+		delete from plant_tel where code = #{code};
+	</delete>
+	<select id="findData" parameterType="com.ip.founder.apiplatform.pojo.PlantTel" resultType="String">
+  		select * from plant_tel where code = #{code}
+  	</select>
+	<update id="updateTel" parameterType="String">
+		update plant_tel set id = #{1} , region_id = #{2} where id =#{0}
+	</update >
+	<select id="findAllTel" resultType="com.ip.founder.apiplatform.pojo.PlantTel">
+		select * from plant_tel
+	</select>
+</mapper>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ip.founder.apiplatform.dao.tel.PlantRunningStatusMapper">
+	<update id="insertData" parameterType="com.ip.founder.apiplatform.pojo.PlantRunningStatus">
+		insert into plant_running_status (fid,updatetime,status)
+		values(#{fid},#{updatetime},#{status})
+	</update>
+</mapper>

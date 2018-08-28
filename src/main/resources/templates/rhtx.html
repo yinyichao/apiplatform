@@ -1,0 +1,118 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title></title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link rel="stylesheet" href="/css/cameraview.css" />
+	<link rel="stylesheet" href="/css/main.css" />
+</head>
+
+<body>  
+	<OBJECT ID="MdControl" CLASSID="CLSID:755891AC-BA4D-471E-84E1-2AE7031CC943"></OBJECT>
+	<table style="width: 54%; table-layout: fixed; position: absolute; top: 20px; left: 607px; height: 477px;">
+        <tr>
+            <td class="auto-style3">用户名</td>
+            <td style="background-repeat: inherit" class="auto-style2">
+                <input id="Text1" type="text" value="5000" /></td>
+        </tr>
+        <tr>
+            <td class="auto-style4">密码</td>
+            <td class="auto-style1" style="background-repeat: inherit">
+                <input id="Text2" type="text" value="5000" /></td>
+        </tr>
+        <tr>
+            <td class="auto-style5">服务器IP</td>
+            <td style="background-repeat: inherit" class="auto-style6">
+                <input id="Text3" type="text" value="10.1.0.50" /></td>
+        </tr>
+        <tr>
+            <td class="auto-style5">本地IP</td>
+            <td style="background-repeat: inherit" class="auto-style6">
+                <input id="Text4" type="text" value="192.168.50.171" /></td>
+        </tr>
+        <tr>
+            <td class="auto-style9">许可证</td>
+            <td style="background-repeat: inherit" class="auto-style8">
+                <input id="Text5" aria-multiline="True" aria-multiselectable="True" type="text" value="47B35AC2E344B4E9F3894E8BCD4D115A" /></td>
+        </tr>
+
+        <tr>
+            <td class="auto-style7" colspan="2">
+                <input id="Button1" type="button" value="初始化" onclick ="return Button1_onclick()" />
+                <input id="Button4" type="button" value="登陆" onclick="return Button4_onclick()" />
+                <input id="Button3" type="button" value="注销" onclick="return Button3_onclick()" />&nbsp;
+               	呼叫号码 <input id="Text6" type="text" value="1104" /><br />
+               	<input id="Button6" type="button" value="语音呼叫" onclick="return Button6_onclick()"/><br />
+		&nbsp;<div>
+		</div>
+		</td>
+		</tr>
+		</table>
+</body>
+<script src="/js/jquery-1.12.4.min.js"></script>
+<script>
+//<![CDATA[
+//init
+function Button1_onclick() {
+
+	MdControl.userName = Text1.value;
+	MdControl.password = Text2.value;
+	MdControl.serverIP = Text3.value;
+	MdControl.localIP = Text4.value;
+	MdControl.license = Text5.value;
+	//MdControl.SetPhoneGroup(1,1,"5003");
+
+	var bresult = MdControl.isInit;
+
+	if (bresult == 0) {
+		var a = MdControl.init();
+	} else {
+		alert("已经初始化！");
+		return;
+	}
+}
+//注销
+function Button3_onclick() {
+    var bresult = MdControl.isInit;
+
+    if (bresult == 0) {
+        alert("没有初始化！");
+        return;
+    }
+
+    var a = MdControl.logout();
+}
+//登录
+function Button4_onclick() {
+    var bresult = MdControl.isInit;
+
+    if (bresult == 0) {
+        alert("没有初始化！");
+        return;
+    }
+    var a = MdControl.login(10);
+    //Button54_onclick();
+}
+//拨号
+function Button6_onclick() {
+
+    var bresult = MdControl.isInit;
+
+    if (bresult == 0)
+    {
+        alert("没有初始化！");
+        return;
+    }
+    var nLine = MdControl.getActiveLine();
+
+    var Number = Text6.value;
+    if (!Number && typeof (Number) != "undefined" && Number != 0)
+    {
+        return;
+    }
+
+    var a = MdControl.makeCall(nLine, Number, 1);
+}
+ //]]>
+</script>
+</html>

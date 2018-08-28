@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>${name}</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+</head>
+<body onload="init()" onunload="ButtonLogout_onclick()">
+	<!-- <div style="width: 90%;height: 30px;overflow: auto;" id="RetInfo">
+	</div>
+
+	<div style="width: 90%;height: 30px;overflow: auto;" id="GlobalInfo">
+	</div> -->
+<input type="button" value="播放" onclick="startPreview_g()"></input>
+		<input type="button" value="结构" onclick="ButtonGetDGroupStr_onclick()"></input>
+		<input type="button" value="截图" onclick="ButtonCapturePictureByWndNo_onclick()"></input>
+	<!-- <div class="box_top"></div> -->
+	<div style="width: 100%;height:600px;">
+		<object id="DPSDK_OCX" classid="CLSID:D3E383B6-765D-448D-9476-DFD8B499926D"
+			style="width: 100%; height: 80%" codebase="DpsdkOcx.cab#version=1.0.0.0"></object>
+	</div>
+	<input type="hidden" id="textWndNum" value="1"></input>
+	<!-- <input type="hidden" id="textIP" value="10.12.60.1"></input>
+	<input type="hidden" id="textPort" value="9000"></input>
+	<input type="hidden" id="textUser" value="admin"></input>
+	<input type="hidden" id="textPassword" value="admin123"></input> -->
+	<input type="hidden" id="textIP" th:value="${pfData.url}"></input> 
+	<input type="hidden" id="textPort" th:value="${pfData.port}"></input> 
+	<input type="hidden" id="textUser" th:value="${pfData.username }"></input> 
+	<input type="hidden" id="textPassword" th:value="${pfData.password}"></input>
+	
+	<input type="hidden" id="selectStreamType" value="1"></input>
+	<input type="hidden" id="selectMediaType" value="1"></input>
+	<input type="hidden" id="selectTransType" value="1"></input>
+<input type="hidden" id="textCameraID_g" value="0702040112010101006"></input>
+<input type="hidden" id="textCameraID" value="23020103011320934013"></input> 
+	<input type="hidden" id="textChnlSN" value="30001"></input>
+	<div id="DGroupInfo">1</div>
+	<div class="fun-div" style="float:left;margin-top:0">
+		<input type="button" value="播放" onclick="startPreview_g()"></input>
+		<input type="button" value="结构" onclick="ButtonGetDGroupStr_onclick()"></input>
+		<input type="button" value="截图" onclick="ButtonCapturePictureByWndNo_onclick()"></input>
+	</div>
+</body>
+<script src="/js/jquery-1.12.4.min.js"></script>
+<script src="/js/cameraview/getVideoDH.js"></script>
+<script>
+	function ButtonGetDGroupStr_onclick()
+	{
+		var obj = document.getElementById("DPSDK_OCX");
+		obj.DPSDK_LoadDGroupInfo();
+		var te = obj.DPSDK_GetDGroupStr();
+		$.ajax({
+			url:"/video/es",
+			type:"post",
+			data:{"data":te},
+			success:function(data){
+
+			}
+		});
+	}
+</script>
+</html>

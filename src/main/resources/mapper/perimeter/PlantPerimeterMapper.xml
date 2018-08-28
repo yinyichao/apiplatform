@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ip.founder.apiplatform.dao.perimeter.PlantPerimeterMapper">
+	<!-- 摄像机概览 -->
+	<select id="findCameraView" resultType="com.ip.founder.apiplatform.pojo.View" parameterType="com.ip.founder.apiplatform.pojo.Pager">
+		SELECT SKIP #{skip} FIRST #{pageSize} 
+		p.id,p.in_time as inTime,p.name,p.fid as fid,j.name as jname,p.status,nvl(y.count,0) as count,f.name as fname,r.name as pname  
+		from plant_perimeter p 
+		left join (select equipment_code,count(equipment_code)as count from yj_police group by equipment_code) y
+		on p.code=y.equipment_code
+		inner join plant_factory f on p.fid=f.id 
+		inner join plant_perimeter_region r on p.region_id = r.id
+		inner join jy j on p.pid = j.id		
+	</select>
+  	<select id="findCameraName" parameterType="String" resultType="String">
+  		select name from plant_perimeter where code = #{code}
+  	</select>
+  	<update id="updateData" parameterType="com.ip.founder.apiplatform.pojo.PlantRunningStatus">
+		update plant_perimeter set status = #{status}
+		where code = #{fid}
+	</update>
+	<insert id="insertData" parameterType="com.ip.founder.apiplatform.pojo.PlantPerimeter">
+		<selectKey keyProperty="id" resultType="String" order="BEFORE">
+           select nvl(max(TO_NUMBER(id)),0)+1 from plant_tel
+       </selectKey>
+		insert into plant_perimeter(id,name,code,type,port,address_url,status,region_id,pid,fid,location,in_time) values(#{id},#{name},#{code},#{type},#{port},#{addressUrl},#{status},#{regionId},#{pid},#{fid},#{location},#{inTime})
+	</insert>
+	<delete id="deleteData" parameterType="String">
+		delete from plant_perimeter where code = #{code};
+	</delete>
+	<select id="selectRegionIdByName" parameterType="String" resultType="String">
+		select id from plant_perimeter_region where name =#{name};
+	</select>
+	<select id="findData" parameterType="com.ip.founder.apiplatform.pojo.PlantPerimeter" resultType="String">
+  		select * from plant_perimeter where code = #{code}
+  	</select>
+  	<select id="findAddressUrlByRemark" parameterType="String" resultType="String">
+    	select address_url from plant_perimeter where remark = #{code}
+    </select>
+    <select id="findCodeByRemark" parameterType="String" resultType="String">
+    	select code from plant_perimeter where remark = #{code}
+    </select>
+    <insert id="insertPlantPerimeterRegion" parameterType="com.ip.founder.apiplatform.pojo.PlantPerimeterRegion">
+    	insert into plant_perimeter_region(id,name,remarks,parent_id,region_level,source,code) values(#{id},#{name},#{remarks},#{parent_id},#{regionLevel},#{source},#{code})
+    </insert>
+    <select id="findRegionId" resultType="int">
+    	select nvl(max(TO_NUMBER(id)),0)+1 from plant_perimeter_region
+    </select>
+    <insert id="insertCamera" parameterType="com.ip.founder.apiplatform.pojo.PlantPerimeter">
+        insert into plant_perimeter(id,name,type,terrace,code,status,region_id,pid,fid,in_time,remark,location,address_url)
+             values(#{id},#{name},#{type},#{terrace},#{code},#{status},#{regionId},#{pid},#{fid},#{inTime},#{remark},#{location},#{addressUrl})
+    </insert>
+	<update id="updateVideo" parameterType="String">
+		update plant_perimeter set id = #{1} , region_id = #{2} where id =#{0}
+	</update >
+	<select id="findAllVideo" resultType="com.ip.founder.apiplatform.pojo.PlantPerimeter">
+		select * from plant_perimeter
+	</select>
+	<select id="findAllVideoNotNull" resultType="com.ip.founder.apiplatform.pojo.PlantPerimeter">
+		select * from plant_perimeter where address_url is not null
+	</select>
+	<update id="updatePlantPerimeter" parameterType="com.ip.founder.apiplatform.pojo.PlantPerimeter">
+		update plant_perimeter set name=#{name},code=#{code},type=#{type},port=#{port},status=#{status},region_id=#{regionId},location=#{location},in_time=#{inTime},x='0' where id = #{id}
+	</update>
+	<update id="updateDelete" parameterType="String">
+		update plant_perimeter set x = '1' where id = #{0}
+	</update>
+</mapper>

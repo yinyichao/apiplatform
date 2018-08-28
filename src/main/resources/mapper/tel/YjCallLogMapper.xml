@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ip.founder.apiplatform.dao.tel.YjCallLogMapper">
+	<insert id="insertData" parameterType="com.ip.founder.apiplatform.pojo.YjCallLog">
+       <selectKey keyProperty="id" resultType="String" order="BEFORE">
+           select nvl(max(TO_NUMBER(id)),0)+1 from yj_oper_log
+       </selectKey>
+		insert into yj_call_log (id,currentfid,type,start_time,end_time,otherfid,user_id)
+		values(#{id},#{currentfid},#{type},#{start_time},#{end_time},#{otherfid},#{user_id})
+	</insert>
+</mapper>

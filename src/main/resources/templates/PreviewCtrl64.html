@@ -1,0 +1,92 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+    <title>实时预览Demo</title>
+    <SCRIPT>
+    //<![CDATA[
+		function LoginPlat()
+		{
+			//Demo默认使用密码登录方式
+			var IP = "10.2.60.1";
+			var port = "80";
+			var UserName = "admin";
+			var Password = "Hik12345";
+			var v1 = "<?xml version=\"1.0\" encoding=\"utf-8\"?><LoginInfo><LoginType>2</LoginType><SynLogin>1</SynLogin><IP>"+IP+"</IP><Port>"+port
+			+"</Port><UserName>"+UserName+"</UserName><Password>"+Password+"</Password></LoginInfo>";
+			//alert(v1);
+			var v = preview.LoginPlat(v1);
+			if(v != 0)
+			    alert("登录失败");
+			else{
+				alert("登录成功");
+				StartPreview();
+			}
+                
+		}
+
+		//新的预览接口，需先登录平台，登录需要耗点时间，稍等（控件自身取Token）
+		function StartPreview()
+		{
+			var Code = "12312317001310000169";
+			var _param = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Preview><CamIndexCode>"+Code+"</CamIndexCode></Preview>";
+            //var _param = "testesttesttest"
+			alert(_param);
+			preview.StartPreview( _param);
+		}
+		
+		function OnStopPreview(){
+			preview.StopPreview();
+		}
+	//]]>
+    </SCRIPT>
+    
+<!-- 以下是事件触发函数接口 -->  
+<script language="javascript" for="preview" event="MsgNotify(iMsg,iError,szDetail,lWnd)">  
+	//<![CDATA[
+	if (iMsg == 0x0200000E) {
+		var _id = iError;
+		var _token = "#token#";
+	}
+	if (iMsg == 33554446) {
+		var _id = iError;
+		var _token = "#token#";
+		preview.SetToken(_id, _token);
+	}
+	if (iMsg == 0x02000007)
+	{
+		var _right = "10034,10033,10032,10020,10027,10014,10001,10028,10002,10015,10005,10010,10024,10006,10011,10003,10021,10012,10022,10004,10013,10009,10029";
+		preview.SetRightCode(_right);
+		var _toolbar = "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
+				+ "<ToolBar><Item type=\"0\" /><Item type=\"24\" /><Item type=\"5\" />"
+				+ "<Item type=\"6\" /><Item type=\"7\" /><Item type=\"8\" />"
+				+ "<Item type=\"9\" /><Item type=\"10\" /><Item type=\"12\" />"
+				+ "<Item type=\"17\" /><Item type=\"20\" /><Item type=\"21\" />"
+				+ "<Item type=\"22\" /></ToolBar>";
+		preview.SetToolBar(_toolbar);
+		preview.SetToolBarAlwaysShow(1);
+		preview.SetInstPlayCfg(30);
+		var _snap = "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
+				+ "<SnapShot><PicType>jpeg</PicType><Quality>80</Quality><SnapMulti>1</SnapMulti>"
+				+ "<SnapTimes>3</SnapTimes><TimeSpan>1</TimeSpan><SaveFolder>C:\\Users\\huangjunyf2\\Documents\\CSC\\capture\\</SaveFolder><KeyWords></KeyWords></SnapShot>";
+		preview.SetSnapParam(_snap);
+		var _record = "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
+				+ "<VideoRecord><PackType>0</PackType><MaxRecTime>0</MaxRecTime>"
+				+ "<PackTime>100</PackTime><PackSize>100</PackSize><SaveFolder>C:\\Users\\huangjunyf2\\Documents\\CSC\\record\\</SaveFolder><KeyWords></KeyWords></VideoRecord>";
+		preview.SetRecordParam(_record);
+		//preview.SetLayoutType(1);
+	}
+	//]]>
+</script>
+
+</head>
+<body>
+
+
+            <!-- 添加预览控件（需要先在windows下注册） -->
+            <div id="ocxContainer" style="width:100%;height:70%">
+            	<object classid="clsid:6174A972-8191-4A42-B51B-9BF2D2472E69" id="preview" width="600" height="500"  name="preview" ></object>
+            </div>
+            <input onclick="LoginPlat()" value="login" type="button"></input>
+</body>
+</html>
+

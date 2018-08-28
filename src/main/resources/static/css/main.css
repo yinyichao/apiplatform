@@ -1,0 +1,186 @@
+table tr td{
+	width:90px;
+	height:49px;
+	font-size:14px;
+	text-align:center;
+}
+
+/*录像页面的CSS*/
+.frame-div1{
+	background-color:#eff0f0;
+	box-shadow:#ffffff;
+	width:100%;
+	height:52px;
+	line-height:52px;
+	float:left;
+	}
+.frame-div2{
+	border-top:1px solid #d1d2d3;
+	border-left:1px solid #d1d2d3;
+	border-right:1px solid #d1d2d3;
+	border-bottom:1px solid #d1d2d3;
+	height:50px;
+	}
+.check-div{
+	float:right;
+	margin-top:14px;
+	height:26px;
+	}
+.check-img{
+	float:right;
+	width:26px;
+	height:26px;
+	margin-right:38px;
+	margin-top:14px;
+	}
+.check-img input{
+	width:26px;
+	height:26px;
+	border:none;
+	background-image:url(/images/search.png);
+	background-color:#FFF;
+	}
+.title-div{
+	float:left;
+	}
+.check-div input{
+	height:26px;
+	border:none;
+	color:#7e7d7b;
+	height:24px;
+	font-size:14px;
+	}
+.camera-div{
+	height:65px;
+	background-color:#FFF;
+	border-top:1px solid #d1d2d3;
+	border-left:1px solid #d1d2d3;
+	border-right:1px solid #d1d2d3;
+	}
+.camera-text{
+	width:auto;
+	float:left;
+	margin-left:42px;
+	font-size:16px;
+	font-weight:bold;
+	margin-top:20px;
+	margin-bottom:18px;
+	color:#333333;
+	}
+.fun-div{
+	float:right;
+	color:#333333;
+	background-image:url(/images/btn.png);
+	margin-top:25px;
+	width:119px;
+	height:38px;
+	margin-right:5px;
+	text-align:center;
+	}
+.fun-div input{
+	width:119px;
+	height:39px;
+	font-size:14px;
+	font-weight:bolder;
+	background-color:transparent;
+	}
+.table-div{
+	text-align:center;
+	height:auto;
+	background-color:#FFF;
+	}
+.td2{
+	border-bottom:1px solid #d1d2d3;
+	border-left:1px solid #d1d2d3;
+	border-top:1px solid #d1d2d3;
+	background-color: #ebecf3;
+	}
+.td1{
+	border-right:1px solid #d1d2d3;
+	border-bottom:1px solid #d1d2d3;
+	border-left:1px solid #d1d2d3;
+	border-top:1px solid #d1d2d3;
+	background-color: #ebecf3;
+	}
+.td3{
+	border-left:1px solid #d1d2d3;
+	border-bottom:1px solid #d1d2d3;
+	}
+.td4{
+	border-right:1px solid #d1d2d3;
+	border-bottom:1px solid #d1d2d3;
+	border-left:1px solid #d1d2d3;
+	}
+.bottom-div{
+	
+	height:50px;
+	width:100%;
+	background-color:#FFF;
+	}
+.bottom-div ul{
+	float:right;
+	margin-right:80px;
+	text-align:center;
+	}
+.bottom-div li{
+	list-style:none;
+	padding:0px;
+	margin:3px;
+	float:left;
+	width:33px;
+	height:33px;
+	background-color:#d1d9da;
+	text-align:center;
+	font-size:16px;
+	color:#333333;
+	line-height:35px;
+	}
+.bottom-div li:hover{
+	cursor:pointer;
+	}
+/*sec_Service 页面的CSS*/
+	.sec-left{
+		width:12%;
+		float:left;
+		background: none;
+		border:1px solid #ebecf3;
+		margin-top: 42px;
+		margin-left:6.7% 
+	} 
+	
+	
+	.sec-left>.nav>li{
+		padding-top:-10px;
+		padding-left:10px;
+		line-height: 28px;
+		font-size: 14px;
+		list-style: none;
+		text-align: left;
+	}
+	.sec-left>.nav>li:HOVER{
+		background-color: #ebecf3;
+		cursor:pointer;
+	}
+	.sec_right{
+		background: none;
+		width:74%;
+		float:right;
+		border:1px solid #ebecf3;
+		margin-top:42px;
+		margin-right:7% 
+	}
+	.right_title{
+		background-color:#ebecf3;
+		height:40px;
+		font-size: 18px;
+		padding-top: 15px;
+		padding-left: 15px;
+	}
+	.right_text{
+		line-height: 40px;
+		margin-top: 10px;
+		margin-bottom: 10px;
+		padding-left: 20px;
+		padding-right: 20px;
+		text-indent: 2em;
+	}

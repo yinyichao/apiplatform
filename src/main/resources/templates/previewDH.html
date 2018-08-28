@@ -1,0 +1,113 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>${name}</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+</head>
+<body onunload="ButtonLogout_onclick()">
+<div style="width: 90%;height: 30px;overflow: auto;" id="RetInfo">
+111
+</div>
+	<input type="hidden" id="textWndNum" value="1"></input>
+
+	<input type="text" id="textIP" value="10.5.40.13"></input>
+	<input type="text" id="textPort" value="9000"></input>
+	<input type="text" id="textUser" value="system"></input>
+	<input type="text" id="textPassword" value="lmjy123456"></input>
+	
+	<input type="hidden" id="selectStreamType" value="1"></input>
+	<input type="hidden" id="selectMediaType" value="1"></input>
+	<input type="hidden" id="selectTransType" value="1"></input>
+<input type="text" id="textCameraID_g" value="0702010113010101010"></input>
+<input type="text" id="textCameraID" value="23000023561320232010"></input>
+	<input type="text" id="textCameraID_d" value="1000136$7$0$0"></input>
+	<input type="hidden" id="textChnlSN" value="30001"></input>
+	<div id="DGroupInfo">1</div>
+	<div class="fun-div" style="float:left;margin-top:0">
+		<input type="button" value="登陆" onclick="initi()"></input>
+		<input type="button" value="old播放" onclick="startPrevie()"></input>
+		<input type="button" value="播放" onclick="startPreview_g()"></input>
+		<input type="button" value="结构" onclick="ButtonGetDGroupStr_onclick()"></input>
+		<input type="button" value="截图" onclick="ButtonCapturePictureByWndNo_onclick()"></input>
+		<input type="button" value="开门" onclick="opendoor()"></input>
+	</div>
+	<div style="width: 100%;height:600px;">
+		<object id="DPSDK_OCX" classid="CLSID:D3E383B6-765D-448D-9476-DFD8B499926D"
+				style="width: 100%; height: 80%" codebase="DpsdkOcx.cab#version=1.0.0.0"></object>
+	</div>
+</body>
+<script src="/js/jquery-1.12.4.min.js"></script>
+<script src="/js/cameraview/getVideoDH.js"></script>
+<script>
+	function ButtonGetDGroupStr_onclick()
+	{
+		var obj = document.getElementById("DPSDK_OCX");
+		obj.DPSDK_LoadDGroupInfo();
+		var te = obj.DPSDK_GetDGroupStr();
+		$.ajax({
+			url:"/video/es",
+			type:"post",
+			data:{"data":te},
+			success:function(data){
+				alert(data);
+			}
+		});
+	}
+    function initi(){
+
+        var obj = document.getElementById("DPSDK_OCX");
+        gWndId = obj.DPSDK_CreateSmartWnd(0, 0, 100, 100); //初始化控件，创建视频窗
+
+        obj.DPSDK_SetWndCount(gWndId, 4);//将视频窗4分割
+
+        var obj = document.getElementById("DPSDK_OCX");
+
+        var szIp = document.getElementById("textIP").value;
+        var nPort = document.getElementById("textPort").value;
+        var szUsername = document.getElementById("textUser").value;
+        var szPassword = document.getElementById("textPassword").value;
+        var nRet = obj.DPSDK_Login(szIp, nPort, szUsername, szPassword);//登陆，参数根据环境自己设置
+        //alert("Login" + "  " + nRet);
+        if(nRet == 0)
+        {
+            bLogin = 1;
+        }
+    }
+    function startPrevie(){
+        var obj = document.getElementById("DPSDK_OCX");
+        obj.DPSDK_LoadDGroupInfo();
+        var te = obj.DPSDK_GetDGroupStr();
+        var szCameraId = document.getElementById("textCameraID").value;
+        alert(szCameraId);
+        nRet = obj.DPSDK_StartRealplayByWndNo(gWndId, 1, szCameraId, 1, 1, 1);//第一个子窗口打开视频,视频通道号1000605$1$0$0，此字段的获取请参考开发包中附带的《组织树XML解析手册》和《常见问题解答文档》
+    }
+    function opendoor(){
+		var obj = document.getElementById("DPSDK_OCX");
+        obj.DPSDK_LoadDGroupInfo();
+        var te = obj.DPSDK_GetDGroupStr();
+		var szCameraId = document.getElementById("textCameraID_d").value;
+		//alert(szCameraId);
+		var result = obj.DPSDK_SetDoorCmd(szCameraId, 5);
+		//ShowCallRetInfo(result,"远程开门");
+	}
+    function ShowCallRetInfo(nRet, strInfo)
+    {
+
+        var str = "";
+        if(nRet == 0)
+        {
+            str = strInfo + " 成功！";
+        }
+        else
+        {
+            str = strInfo + "失败！错误码：" + nRet;
+            if(nRet == 19 || nRet == 20)
+            {
+                str += "，请先加载组织结构！";
+            }
+        }
+        document.getElementById("RetInfo").innerText = str;
+    }
+</script>
+</html>

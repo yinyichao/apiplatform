@@ -1,0 +1,76 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>${name}</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<!-- 以下是事件触发函数接口 -->  
+ <script language="javascript" for="playback" event="MsgNotify(iMsg,iError,szDetail,lWnd)">  
+   //<![CDATA[
+     szMsg = "消息类型:" + iMsg + "，错误码:" + iError + "，详细信息:" + szDetail + "，窗口ID: " + lWnd;  
+     //alert(szMsg);
+     document.getElementById("Result").value = szMsg;
+     if (iMsg == 0x02000006) 
+     {
+         var id = iError;
+         var _token = "#token#"; //通过webservice获取
+         //playback.SetToken(id, "");
+     }
+     else if (iMsg == 0x02000005) 
+     {
+         var v = "抓图结果："+szDetail;
+         alert(v);
+     }
+     else if (iMsg == 0x200000E) 
+     {
+         alert("上一个按钮被按下");
+     }
+     else if (iMsg == 0x200000F) 
+     {
+         alert("下一个按钮被按下");
+     }
+     //]]>
+ </script>
+  </head>  
+  <body th:style="'margin:0px'" onload="init()" onunload="StopPlay()">
+	
+		<div style="overflow:hidden;text-align:center">
+            <!-- 添加回放控件（需要先在windows下注册） -->
+            <div style="text-align:center">
+            <!-- <form name="frmApp" method="post" action="">  -->           
+                         开始时间：<input id="BeginTime" type="text" name="BeginTime" value='' onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'});" class="select-text" style="padding: 0 5px;"></input>
+			 结束时间：<input id="EndTime" type="text" name="EndTime" value='' onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'});" class="select-text" style="padding: 0 5px;"></input>
+            <input type="button" value="录像回放" onclick="playBackHK()" />
+            <input type="button" value="录像下载" onclick="OnDownload()" />
+					<!--回调结果-->
+						<input type="text" name="Result" style="width:440px"  id="Result" value=""></input>
+						<br></br>
+					<!--IP-->
+						<input type="text" name="IP" id="IP" th:value="${pfData.url}" style="width:120px"></input>
+					<!--Port-->
+						<input type="text" name="port" id="port" th:value="${pfData.port}" style="width:40px"></input>
+					<!--UserName-->
+						<input type="text" name="UserName" id="UserName" th:value="${pfData.username}" style="width:60px"></input>
+					<!--Password-->
+						<input type="text" name="Password" id="Password" th:value="${pfData.password}" style="width:100px"></input>
+					<!--CameraIndexCode-->
+						<input type="text" name="CameraIndexCode" style="width:160px"  id="CameraIndexCode" value="12345677001310000012"></input>
+					<!--CameraName-->
+						<input type="text" name="CameraName" id="CameraName" value="黑-呼-1号监舍楼3层卫生1号（四）" style="width:120px"></input>
+						<!-- <input type="text" name="EndTime" id="EndTime" value="2017-10-09T14:59:59.000Z" style="width:160px"> -->
+					<!--StoreDeviceType-->
+						<input type="text" name="StoreDeviceType" id="StoreDeviceType" value="0" style="width:20px"></input>
+					<!--PlayPosition-->
+						<input type="text" name="PlayPosition" id="PlayPosition" value="1493946300" style="width:100px"></input>
+					<!--PreNextBtnVisible-->
+						<input type="text" name="PreNextBtnVisible" id="PreNextBtnVisible" value="true" style="width:60px"></input>
+				<!-- </form> -->
+			</div>			
+			<div id="ocxContainer">
+                <object classid="CLSID:D4E11A6C-245F-48FB-9D02-8C53C0AB10F6" id="playback" width="400" height="400"  name="playback" ></object>
+            </div>
+		 </div>     
+    
+</body>
+ <script src="/js/My97DatePicker/WdatePicker.js"></script>
+ <script src="/js/cameraview/playBack.js"></script>
+</html>

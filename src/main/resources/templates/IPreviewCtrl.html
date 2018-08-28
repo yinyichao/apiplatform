@@ -1,0 +1,178 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+    <title>实时预览Demo</title>
+    <style type="text/css">
+        div,td,input
+        {
+        	font-size:12px;
+        }
+        .ptzBtn
+        {
+        	width:32px;
+        }
+        #Select1
+        {
+            width: 67px;
+        }
+        #SelectWnd
+        {
+            width: 70px;
+        }
+    </style>
+    <script src="/js/jquery-1.12.4.min.js"></script>
+    <SCRIPT>
+		function LoginPlat()
+		{
+		//<![CDATA[ 
+			//Demo默认使用密码登录方式
+			var IP = document.frmApp.IP.value;
+			var port = document.frmApp.port.value;
+			var UserName = document.frmApp.UserName.value;
+			var Password = document.frmApp.Password.value;
+			var v1 = "<?xml version=\"1.0\" encoding=\"utf-8\"?><LoginInfo><LoginType>2</LoginType><SynLogin>1</SynLogin><IP>"+IP+"</IP><Port>"+port
+			+"</Port><UserName>"+UserName+"</UserName><Password>"+Password+"</Password></LoginInfo>";
+			//alert(v1);
+			var v = preview.LoginPlat(v1);
+			if(v != 0)
+			alert("登录失败，请查看日志preview.log");
+			//]]>
+		}
+
+		//新的预览接口，需先登录平台，登录需要耗点时间，稍等（控件自身取Token）
+		function StartPreview()
+		{
+		//<![CDATA[ 
+			var Code = document.frmApp.CameraIndexCode.value;
+			var _param = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Preview><CamIndexCode>"+Code+"</CamIndexCode></Preview>";
+			preview.StartPreview( _param);
+			//]]>
+		}
+		function StartPreviewByIndex()
+		{
+		//<![CDATA[ 
+			var Code = document.frmApp.CameraIndexCode.value;
+			var _param = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Preview><CamIndexCode>"+Code+"</CamIndexCode></Preview>";
+			preview.StartPreviewByIndex( _param,1);
+			//]]>
+		}
+		function OnStopPreview(){
+			preview.StopPreview();
+		}
+		function showXML(){
+			hhh();
+			hhh();
+			hhh();
+			hhh();
+		}
+		function hhh(){
+			$.ajax({
+				url:"http://192.168.1.168:8080/video/xml",
+				data:{"prison":"04","code":"12345677001310000008"},
+                contentType: "application/x-www-form-urlencoded",
+				type:"get",
+				success:function(data){
+					preview.StartPreviewEx(data);
+				}
+			});
+		}
+    </SCRIPT>
+    
+<!-- 以下是事件触发函数接口 -->  
+<script language="javascript" for="preview" event="MsgNotify(iMsg,iError,szDetail,lWnd)">  
+	//<![CDATA[
+	szMsg = "消息类型:" + iMsg + "，错误码:" + iError + "，详细信息:" + szDetail + "，窗口ID: " + lWnd;
+	//alert(szMsg);
+	document.frmApp.Result.value = szMsg;
+	if (iMsg == 0x0200000E) {
+		$.ajax({
+			url:"http://192.168.1.168:8080/video/token",
+			data:{"prison":"04"},
+			type:"get",
+			success:function(data){
+				preview.SetToken(iError, data);
+			}
+		});
+	}
+	if (iMsg == 33554446) {
+        var _id = iError;
+        var _token = "#token#";
+        preview.SetToken(_id, _token);
+    }
+	if (iMsg == 0x02000007)
+	{
+		var _right = "10034,10033,10032,10020,10027,10014,10001,10028,10002,10015,10005,10010,10024,10006,10011,10003,10021,10012,10022,10004,10013,10009,10029";
+		preview.SetRightCode(_right);
+		var _toolbar = "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
+				+ "<ToolBar><Item type=\"0\" /><Item type=\"24\" /><Item type=\"5\" />"
+				+ "<Item type=\"6\" /><Item type=\"7\" /><Item type=\"8\" />"
+				+ "<Item type=\"9\" /><Item type=\"10\" /><Item type=\"12\" />"
+				+ "<Item type=\"17\" /><Item type=\"20\" /><Item type=\"21\" />"
+				+ "<Item type=\"22\" /></ToolBar>";
+		preview.SetToolBar(_toolbar);
+		preview.SetToolBarAlwaysShow(1);
+		preview.SetInstPlayCfg(30);
+		var _snap = "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
+				+ "<SnapShot><PicType>jpeg</PicType><Quality>80</Quality><SnapMulti>1</SnapMulti>"
+				+ "<SnapTimes>3</SnapTimes><TimeSpan>1</TimeSpan><SaveFolder>E:\\</SaveFolder><KeyWords></KeyWords></SnapShot>";
+		preview.SetSnapParam(_snap);
+		var _record = "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
+				+ "<VideoRecord><PackType>0</PackType><MaxRecTime>0</MaxRecTime>"
+				+ "<PackTime>100</PackTime><PackSize>100</PackSize><SaveFolder>E:\\</SaveFolder><KeyWords></KeyWords></VideoRecord>";
+		preview.SetRecordParam(_record);
+	}
+	//]]>
+</script>
+
+</head>
+<body onload="showXML()">
+<form name="frmApp" mothed="post" action="">
+	回调结果
+		<input type="text" name="Result" style="width:440px"  id="Result" value=""/>
+		<br/>
+	监控点编号
+		<input type="text" name="CameraIndexCode" style="width:160px"  id="CameraIndexCode" value="23343532001310000019"/>
+	IP
+		<input type="text" name="IP" id="IP" value="10.26.35.253" style="width:120px"/>
+	Port
+		<input type="text" name="port" id="port" value="80" style="width:40px"/>
+	UserName
+		<input type="text" name="UserName" id="UserName" value="admin" style="width:60px"/>
+	Password
+		<input type="text" name="Password" id="Password" value="Hik12345" style="width:100px"/>
+	VAGIP
+		<input type="text" name="VAGIP" id="VAGIP" value="10.33.27.144" style="width:120px"/>
+	VAGPort
+		<input type="text" name="VAGPort" id="VAGPort" value="7302" style="width:40px"/>
+</form>
+    <div style="text-align:left;font-size:14px">HIKVISION 网页控件</div>
+    <div style="text-align:left;background-color: #C0C0C0;width:600px" >&nbsp;</div>
+    <div style="width:600px">
+        <div style="width:100%;float:right;overflow:hidden">
+            &nbsp;<br />
+            <table width="100%" style="border: thin solid #C0C0C0" >
+                <tr>
+                    <!--td width="65px" align="center"><input type="button" value="初始化控件" onclick="OnInit()" /></td-->
+					<td>登录平台预览功能</td>
+					<td width="65px" align="center"><input type="button" value="登录平台" onclick="LoginPlat()" /></td>
+					<td width="65px" align="center"><input type="button" value="登录平台预览" onclick="StartPreview()" /></td>
+					<td width="65px" align="center"><input type="button" value="登录平台预览2" onclick="StartPreviewByIndex()" /></td>
+					<td>不登录平台预览功能</td>
+					<td width="65px" align="center"><input type="button" value="老接口预览" onclick="StartPreviewEx()" /></td>
+					<td width="65px" align="center"><input type="button" value="停止预览" onclick="OnStopPreview()" /></td>
+                <td width="65px" align="center"><input type="button" value="xml" onclick="showXML()" /></td>
+                </tr>
+            </table>
+        </div>
+        <div style="width:100%;float:left;overflow:hidden">
+            &nbsp;&nbsp;&nbsp;<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <!-- 添加预览控件（需要先在windows下注册） -->
+            <div id="ocxContainer" style="width:100%;height:70%">
+            	<object classid="clsid:6174A972-8191-4A42-B51B-9BF2D2472E69" id="preview" width="600" height="500"  name="preview" ></object>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

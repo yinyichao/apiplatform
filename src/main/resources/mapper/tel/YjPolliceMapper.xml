@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ip.founder.apiplatform.dao.tel.YjPoliceMapper">
+	<insert id="insertData" parameterType="com.ip.founder.apiplatform.pojo.YjPolice">
+       <selectKey keyProperty="id" resultType="String" order="BEFORE">
+           select nvl(max(TO_NUMBER(id)),0)+1 from yj_police
+       </selectKey>
+		insert into yj_police (id,equipment_code,equipment_type,alarm_time,alarm_type,data_resource,prison,eventid)
+		values(#{id},#{equipmentCode},#{equipmentType},#{alarmTime},#{alarmType},#{dataResource},#{prison},#{eventid})
+	</insert>
+	<insert id="updateData" parameterType="com.ip.founder.apiplatform.pojo.YjPolice">
+		update yj_police set handlefile = #{handlefile} where eventid = #{eventid}
+	</insert>
+	<select id="selectData" resultType="com.ip.founder.apiplatform.pojo.YjPolice" parameterType="com.ip.founder.apiplatform.pojo.YjPolice">
+		select * from yj_police where eventid = #{eventid}
+	</select>
+</mapper>

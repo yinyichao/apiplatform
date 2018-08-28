@@ -1,0 +1,67 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>${name}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  </head>
+  <body onload="init()" onunload="ButtonLogout_onclick()">			
+	   <!--  <div style="width: 90%;height: 20px;overflow: auto;" id="RetInfo">			
+		</div> -->
+		
+		<!-- <div style="width: 90%;height: 10px;overflow: auto;" id="GlobalInfo">		
+		</div> -->										
+		
+		<!-- <div class="box_top"></div> -->		
+			<div style="width: 100%;height:400px;">
+				<object id="DPSDK_OCX" classid="CLSID:D3E383B6-765D-448D-9476-DFD8B499926D" style="width: 100%; height: 80%" codebase="DpsdkOcx.cab#version=1.0.0.0"></object>
+			</div>				
+			<input type="hidden" id="textWndNum" value="1"></input>
+	<input type="hidden" id="textIP" value="10.12.60.1"></input>
+	<input type="hidden" id="textPort" value="9000"></input>
+	<input type="hidden" id="textUser" value="admin"></input>
+	<input type="hidden" id="textPassword" value="admin123"></input>
+<!-- 			<input type="text" id="textIP" th:value="${pfData.url}"></input> 
+			<input type="text" id="textPort" th:value="${pfData.port}"></input> 
+			<input type="text" id="textUser" th:value="${pfData.username }"></input> 
+			<input type="text" id="textPassword" th:value="${pfData.password}"></input> 	 -->
+		
+			<input type="hidden" id = "selectStreamType" value="1"></input> 
+			<input type="hidden" id="selectMediaType" value="1"></input> 
+			<input type="hidden" id="selectTransType" value="1"></input> 
+			<input type="hidden" id="textCameraID_g" value="23000023561320241003"></input>
+			<input type="hidden" id="textCameraID" value="1001201$1$0$0"></input>
+			<input type="text" id="textChnlSN" value="30001" ></input> 
+			<input type="button" id="buttonLogout" value="登出" class="button" onclick="return ButtonLogout_onclick()" ></input> 
+			录像回放<br></br>
+			来源：<select id="selectRecordSource" >
+				<option value="3">平台录像</option>
+				<option value="2">设备录像</option>
+			</select>
+			类型：
+			<select id="selectRecordType" >
+				<option value="0">全部录像</option>
+				<option value="1">手动录像</option>
+				<option value="2">报警录像</option>
+				<option value="3">移动侦测</option>
+				<option value="4">视频丢失</option>
+				<option value="5">视频遮挡</option>
+				<option value="6">定时录像</option>
+				<option value="7">全天录像</option>
+			</select>
+			<br></br>
+			开始时间：<input id="textStartTime" type="text" name="" value='' onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',startDate:'%y-%M-%d 00:00:00',maxDate:'%y-%M-%d',minDate:'1970-01-01 10:00:00'})" class="select-text" style="padding: 0 5px;" ></input> 
+			结束时间：<input id="textEndTime" type="text" name="" value='' onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'1970-01-01 10:00:00'})" class="select-text" style="padding: 0 5px;" ></input> 
+			<br></br>
+			FileIndex：<input id="textFileIndex" type="text" name="" value="0" size="5" ></input> <br /> <br />
+			回放：<br></br>
+			<input type="button" id="buttonQueryRecord" value="查询录像" onclick="return ButtonStartTimePlaybackByWndNo()" ></input> 	
+			<input type="button" value="播放" onclick="startPreview_g()"></input>
+			<!-- <input type="button" id="buttonQueryRecord" value="录像列表" onclick="return ButtonLoadDGroupInfo_onclick()" ></input> 	
+  <div style="width: 90%;height: 100px;overflow: auto;" id="GlobalInfo">		
+		</div> -->
+  </body>
+<script src="/js/jquery-1.12.4.min.js"></script>  
+<script src="/js/My97DatePicker/WdatePicker.js"></script>
+<script src="/js/cameraview/playBackDH.js"></script>
+</html>

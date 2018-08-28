@@ -1,0 +1,19 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>hello</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<p th:text="'Hello！, ' + ${name1} + '!'"></p>
+<table border="1">
+    <tr th:each="prod,iterStat : ${factory}">
+        <td th:text="${prod.id}">id</td>
+        <td th:text="${prod.name}">name</td>
+        <td th:text="${prod.url}">url</td>
+        <td th:text="${prod.password}">password</td>
+        <td th:text="${prod.username}">username</td>
+    </tr>
+</table>
+</body>
+</html>

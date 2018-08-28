@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ip.founder.apiplatform.dao.PlantFactoryMapper">
+	<!-- 查询厂家集合 -->
+	<select id="findAllFactory" resultType="com.ip.founder.apiplatform.pojo.PlantFactory">
+		select * from plant_factory
+	</select>
+	<!-- 查询厂商所需数据  -->
+	<select id="findPlantFactoryData" parameterType="String" resultType="com.ip.founder.apiplatform.pojo.PlantFactory">
+		select * from plant_factory where type = '01' and prison =#{code};
+	</select>
+</mapper>

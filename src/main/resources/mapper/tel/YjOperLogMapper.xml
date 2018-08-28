@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ip.founder.apiplatform.dao.tel.YjOperLogMapper">
+	<insert id="insertData" parameterType="com.ip.founder.apiplatform.pojo.YjOperLog">
+       <selectKey keyProperty="id" resultType="String" order="BEFORE">
+           select nvl(max(TO_NUMBER(id)),0)+1 from yj_oper_log
+       </selectKey>
+		insert into yj_oper_log (id,type,title,create_time,remote_addr,operator,method,data_resource,prison)
+		values(#{id},#{type},#{title},#{create_time},#{remote_addr},#{operator},#{method},#{data_resource},#{prison})
+	</insert>
+</mapper>
