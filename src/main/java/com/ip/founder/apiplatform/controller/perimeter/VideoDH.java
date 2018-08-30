@@ -93,26 +93,28 @@ public class VideoDH {
 			List<AlarmDTO> alarmDTOList = JsonUtil.jsonArrToList(data, AlarmDTO.class);
 			assert alarmDTOList != null;
 			for (AlarmDTO alarmDTO : alarmDTOList){
-				VideoAlarmDTO al = new VideoAlarmDTO();
-				al.setSourceIndexCode(alarmDTO.getEquipmentCode().substring(0,alarmDTO.getEquipmentCode().length()-1));
-				al.setEventType(Integer.parseInt(alarmDTO.getAlarmType()));
-				al.setExtendInfo(alarmDTO.getHandleResult());
-				al.setEventTime(stampToDate(alarmDTO.getAlarmTime()));
-				al.setHandleFile(alarmDTO.getHandleFile());
-				PlantDict plantDict = new PlantDict();
-				String name = "bj";
-				Integer type = 4;
-				plantDict.setName(name);
-				plantDict.setType(type);
-				String bjUrl = yjPoliceService.selectUrl(plantDict);
-				String method = "sendMessage";
-				if(al.getEventType()>=300&&al.getEventType()<=1000){
-					data = "{'type':4,'code':'" + JsonUtil.toJson(al) + "'}";
-				}else if((al.getEventType()>=41&&al.getEventType()<=47&&al.getEventType()!=42&&al.getEventType()!=45)||(al.getEventType()>=52&&al.getEventType()<=55)){
-					data = "{'type':6,'code':'" + JsonUtil.toJson(al) + "'}";
+				if(alarmDTO.getHandleFile()!=null){
+					VideoAlarmDTO al = new VideoAlarmDTO();
+					al.setSourceIndexCode(alarmDTO.getEquipmentCode().substring(0,alarmDTO.getEquipmentCode().length()-1));
+					al.setEventType(Integer.parseInt(alarmDTO.getAlarmType()));
+					al.setExtendInfo(alarmDTO.getHandleResult());
+					al.setEventTime(stampToDate(alarmDTO.getAlarmTime()));
+					al.setHandleFile(alarmDTO.getHandleFile());
+					PlantDict plantDict = new PlantDict();
+					String name = "bj";
+					Integer type = 4;
+					plantDict.setName(name);
+					plantDict.setType(type);
+					String bjUrl = yjPoliceService.selectUrl(plantDict);
+					String method = "sendMessage";
+					if(al.getEventType()>=300&&al.getEventType()<=1000){
+						data = "{'type':4,'code':'" + JsonUtil.toJson(al) + "'}";
+					}else if((al.getEventType()>=41&&al.getEventType()<=47&&al.getEventType()!=42&&al.getEventType()!=45)||(al.getEventType()>=52&&al.getEventType()<=55)){
+						data = "{'type':6,'code':'" + JsonUtil.toJson(al) + "'}";
+					}
+					resultData = WebService.service(bjUrl, method, data);
+					insertData(alarmDTO);
 				}
-				resultData = WebService.service(bjUrl, method, data);
-				insertData(alarmDTO);
 			}
 		} else {
 			resultData = "1";
@@ -135,6 +137,7 @@ public class VideoDH {
 		yjPolice.setAlarmTime(date);
 		yjPolice.setAlarmType(alarm.getAlarmType());
 		yjPolice.setAlarmReason(alarm.getHandleResult());
+		yjPolice.setHandlefile(alarm.getHandleFile());
 		yjPolice.setDataResource("02");
 		yjPolice.setPrison(prison);
 		yjPoliceService.insertData(yjPolice);

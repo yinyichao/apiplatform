@@ -33,6 +33,7 @@ import java.nio.charset.Charset;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 @Slf4j
 @Controller
@@ -299,7 +300,7 @@ public class PlantPerimeterAction {
         log.info("海康报警推送调用,参数：{}", data);
         String resultData = "0";
         if (data != null && !"".equals(data.trim())) {
-            data = HttpUtil.unicode(data);
+           data = HttpUtil.unicode(data);
             log.info(data);
             VideoAlarm alarm = JsonUtil.jsonObjToObject(data, VideoAlarm.class);
             insertData(alarm);
@@ -369,67 +370,72 @@ public class PlantPerimeterAction {
         }
         return resultData;
     }
-
+    private ReentrantReadWriteLock rwl = new ReentrantReadWriteLock();
     // 人脸信息(暂时无法使用)
     @RequestMapping(value = "/postFace", method = RequestMethod.POST)
     @ResponseBody
     public String faceMeg(String data) {
         log.info("海康人脸推送调用,参数：{}", data);
         String resultData = "0";
-        if (data != null && !"".equals(data.trim())) {
-            data = HttpUtil.unicode(data);
-            log.info(data);
-            //String str ="{\"photo_url1\":\"\",\"alarm_type\":\"whitealarm\"}";
-            String whitealarm = JsonUtil.getStringFromJsonByKey(data, "alarm_type");
-            YjFace face = new YjFace();
-            String prison = env.getProperty("prison");
-            face.setPrison_id(prison);
-            String identifyTime = JsonUtil.getStringFromJsonByKey(data, "identify_time");
-            if(identifyTime!=null){
-                identifyTime = identifyTime.substring(0,identifyTime.length()-4);
-            }
-            int isYjFace = plantPerimeterService.findFaceByTime(identifyTime);
-            if(isYjFace==0){
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-                Date time = null;
-                try {
-                    time = sdf.parse(identifyTime);
-                } catch (ParseException e) {
-                    e.printStackTrace();
+        rwl.readLock().lock();
+        try {
+            if (data != null && !"".equals(data.trim())) {
+                data = HttpUtil.unicode(data);
+                log.info(data);
+                //String str ="{\"photo_url1\":\"\",\"alarm_type\":\"whitealarm\"}";
+                String whitealarm = JsonUtil.getStringFromJsonByKey(data, "alarm_type");
+                YjFace face = new YjFace();
+                String prison = env.getProperty("prison");
+                face.setPrison_id(prison);
+                String identifyTime = JsonUtil.getStringFromJsonByKey(data, "identify_time");
+                if (identifyTime != null) {
+                    identifyTime = identifyTime.substring(0, identifyTime.length() - 4);
                 }
-                if (whitealarm.equals("whitealarm")) {
-                    //face.setAlarm_type(whitealarm);
-                    String photo_url1 = JsonUtil.getStringFromJsonByKey(data, "photo_url1");
-                    face.setPhoto_url1(photo_url1);
-                    face.setType(1);
-                    face.setIdentify_time(time);
-                    face.setIs_alarm(0);
-                    plantPerimeterService.insertDataTerminal(face);
-                } else {
-                    YjFaceDTO face1 = JsonUtil.jsonObjToObject(data, YjFaceDTO.class);
-                    face.setPhoto_url1(face1.getPhoto_url1());
-                    face.setPhoto_url2(face1.getPhoto_url2());
-                    face.setIdentify_time(time);
-                    face.setIc_card(face1.getIc_card());
-                    face.setSimilarity(face1.getSimilarity());
-                    face.setName(face1.getName());
-                    face.setType(2);
-                    face.setIs_alarm(1);
-                    plantPerimeterService.insertDataTerminal(face);
-                    PlantDict plantDict = new PlantDict();
-                    String name = "bj";
-                    Integer type = 4;
-                    plantDict.setName(name);
-                    plantDict.setType(type);
-                    String bjUrl = yjPoliceService.selectUrl(plantDict);
-                    //String bjUrl = "http://192.168.1.198:8088/jyjsecurity/api/plant?wsdl";
-                    String method = "sendMessage";
-                    data = "{'type':5,'id':'" + face.getId() + "'}";
-                    resultData = WebService.service(bjUrl, method, data);
+                int isYjFace = plantPerimeterService.findFaceByTime(identifyTime);
+                if (isYjFace == 0) {
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                    Date time = null;
+                    try {
+                        time = sdf.parse(identifyTime);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    if (whitealarm.equals("whitealarm")) {
+                        //face.setAlarm_type(whitealarm);
+                        String photo_url1 = JsonUtil.getStringFromJsonByKey(data, "photo_url1");
+                        face.setPhoto_url1(photo_url1);
+                        face.setType(1);
+                        face.setIdentify_time(time);
+                        face.setIs_alarm(0);
+                        plantPerimeterService.insertDataTerminal(face);
+                    } else {
+                        YjFaceDTO face1 = JsonUtil.jsonObjToObject(data, YjFaceDTO.class);
+                        face.setPhoto_url1(face1.getPhoto_url1());
+                        face.setPhoto_url2(face1.getPhoto_url2());
+                        face.setIdentify_time(time);
+                        face.setIc_card(face1.getIc_card());
+                        face.setSimilarity(face1.getSimilarity());
+                        face.setName(face1.getName());
+                        face.setType(2);
+                        face.setIs_alarm(1);
+                        plantPerimeterService.insertDataTerminal(face);
+                        PlantDict plantDict = new PlantDict();
+                        String name = "bj";
+                        Integer type = 4;
+                        plantDict.setName(name);
+                        plantDict.setType(type);
+                        String bjUrl = yjPoliceService.selectUrl(plantDict);
+                        //String bjUrl = "http://192.168.1.198:8088/jyjsecurity/api/plant?wsdl";
+                        String method = "sendMessage";
+                        data = "{'type':5,'id':'" + face.getId() + "'}";
+                        resultData = WebService.service(bjUrl, method, data);
+                    }
                 }
+            } else {
+                resultData = "1";
             }
-        } else {
-            resultData = "1";
+        }finally {
+            rwl.readLock().unlock();
         }
         return resultData;
     }
